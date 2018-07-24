@@ -96,11 +96,12 @@ module CarrierWave
         url = ''
         if opts[:thumb]
           thumb_path = [path, opts[:thumb]].join('')
-          url = img_client.bucket_get_object_share_link(thumb_path, 3600)
+          url = oss_client.bucket_get_object_share_link(thumb_path, 3600)
+          url = url.sub("?OSSAccessKeyId", "&OSSAccessKeyId")
         else
           url = oss_client.bucket_get_object_share_link(path, 3600)
         end
-        url.gsub('http://', 'https://')
+        url.sub("http://#{@aliyun_bucket}.oss-#{@aliyun_area}.aliyuncs.com", @aliyun_host)
       end
 
       def head(path)
